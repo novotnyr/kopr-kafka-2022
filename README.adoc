@@ -1,0 +1,19 @@
+= Kafka a Spring Boot: ukážkový projekt pre workhop
+
+Ukážka:
+
+- producent: Spring Boot a podpora pre Kafku
+- konzument: Spring Boot a podpora pre Kafku
+- infra: Kafka bežiaca cez Docker Compose
+
+Technológie:
+
+- Kafka 3
+- Java 17
+- Spring Boot 2.7
+
+== Vetvy
+
+`main`:: kostra riešenia, z ktorej vychádza workshop
+`solution`:: celé hotové riešenie.
+Pozrite jednotlivé komity pre detailné zmeny.
