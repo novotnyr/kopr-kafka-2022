@@ -42,3 +42,9 @@ Navýšenie počtu partícií:
 ----
 docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic car --partitions 3
 ----
+
+Vytvorenie nového topicu:
+
+----
+docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --create --topic supercar --partitions 3
+----
