@@ -17,3 +17,28 @@ Technológie:
 `main`:: kostra riešenia, z ktorej vychádza workshop
 `solution`:: celé hotové riešenie.
 Pozrite jednotlivé komity pre detailné zmeny.
+
+== Operácie s `kafka-topics`
+
+TIP: Pozri tiež https://www.conduktor.io/kafka/kafka-topics-cli-tutorial[tutoriály na Conduktor.io].
+
+Prezeranie topicov:
+
+    docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+Popis topicov:
+
+    docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --describe car
+
+Uvidíme:
+
+----
+Topic: car	TopicId: GhP9Jq02QeOmZixZzpJmZA	PartitionCount: 1	ReplicationFactor: 1	Configs:
+Topic: car	Partition: 0	Leader: 1	Replicas: 1	Isr: 1
+----
+
+Navýšenie počtu partícií:
+
+----
+docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic car --partitions 3
+----
