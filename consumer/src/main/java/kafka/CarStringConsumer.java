@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CarStringConsumer {
     public static final Logger logger = LoggerFactory.getLogger(CarStringConsumer.class);
 
-    @KafkaListener(topics = "car", groupId = "default")
+    @KafkaListener(topics = "car", groupId = "${kafka.cg:default}")
     public void onCar(String car) {
         logger.info("Producer car notification: {}", car);
     }

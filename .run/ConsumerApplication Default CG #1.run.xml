@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ConsumerApplication #2" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="ConsumerApplication Default CG #1" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="kafka-consumer" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="kafka.ConsumerApplication" />
     <extension name="coverage">
