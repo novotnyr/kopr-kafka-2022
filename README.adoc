@@ -22,35 +22,110 @@ Pozrite jednotlivé komity pre detailné zmeny.
 
 TIP: Pozri tiež https://www.conduktor.io/kafka/kafka-topics-cli-tutorial[tutoriály na Conduktor.io].
 
-Prezeranie topicov:
+IMPORTANT: Vždy predpokladáme, že beží dockerovský kontajner `kafka` s brokerom na `localhoste` a porte `9092`.
 
-    docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --list
+=== Prezeranie topicov
 
-Popis topicov:
+[source,bash]
+----
+docker exec -it kafka \
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+----
 
-    docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --describe car
+=== Popis topicov
+
+[source,bash]
+----
+docker exec -it kafka \
+kafka-topics.sh --bootstrap-server localhost:9092 \
+                --describe car
+----
 
 Uvidíme:
-
 ----
 Topic: car	TopicId: GhP9Jq02QeOmZixZzpJmZA	PartitionCount: 1	ReplicationFactor: 1	Configs:
 Topic: car	Partition: 0	Leader: 1	Replicas: 1	Isr: 1
 ----
 
-Navýšenie počtu partícií:
+=== Navýšenie počtu partícií
 
+[source,bash]
 ----
-docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic car --partitions 3
-----
-
-Vytvorenie nového topicu:
-
-----
-docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --create --topic supercar --partitions 3
+docker exec -it kafka \
+kafka-topics.sh --bootstrap-server localhost:9092 \
+                --alter --topic car --partitions 3
 ----
 
-Konzumovanie z topicu:
+=== Vytvorenie nového topicu
 
+Vytvorme topic s 3 partíciami:
+
+[source,bash]
 ----
-docker exec -it kafka kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic supercar
+docker exec -it kafka \
+kafka-topics.sh --bootstrap-server localhost:9092 \
+                --create --topic supercar --partitions 3
+----
+
+=== Konzumovanie z topicu
+
+[source,bash]
+----
+docker exec -it kafka \
+kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+                          --topic supercar
+----
+
+=== Vymazanie správ z topicu
+
+. Nastavenie retencie na 1 sekundu.
+. Vyčkávanie 1 sekundy, kým Kafka neodstráni správy.
+. Zrušenie retencie
+
+Ak máme premennú prostredia `TOPIC` s názvom topicu, potom mažeme správy:
+
+[source,bash]
+----
+docker exec -it kafka \
+kafka-configs.sh \
+  --bootstrap-server localhost:9092 \
+  --alter \
+  --topic $TOPIC \
+  --add-config retention.ms=1000;
+
+sleep 3;
+
+docker exec -it kafka \
+kafka-configs.sh \
+  --bootstrap-server localhost:9092 \
+  --alter \
+  --topic $TOPIC \
+  --delete-config retention.ms;
+----
+
+=== Popis konfigurácie topicu
+
+Ak máme premennú prostredia `TOPIC` s názvom topicu, potom zistime konfiguráciu:
+
+[source,bash]
+----
+docker exec -it kafka \
+kafka-configs.sh \
+--bootstrap-server localhost:9092 \
+--entity-type topics \
+--entity-name $TOPIC \
+--describe
+----
+
+=== Konzumovanie správ
+
+Ak máme premennú prostredia `TOPIC` s názvom topicu, potom konzumujme:
+
+[source,bash]
+----
+docker exec -it kafka \
+kafka-console-consumer.sh  \
+    --bootstrap-server localhost:9092 \
+    --from-beginning --topic ${TOPIC} \
+    --max-messages 1 --timeout-ms 1000
 ----
